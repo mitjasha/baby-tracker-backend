@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Child, EGender } from './child.model';
+import { CreateCheldDto } from './dto/create-child.dto';
 
 @Injectable()
 export class ChildsService {
@@ -9,16 +10,13 @@ export class ChildsService {
     return this.childs;
   }
 
-  createChild(
-    name: string,
-    birth: string,
-    photo: string,
-    gender: EGender,
-  ): Child {
+  createChild(createChildDto: CreateCheldDto): Child {
+    const { name, gender, birth, photo } = createChildDto;
+
     const child: Child = {
       id: '',
       name,
-      gender: EGender.NAN,
+      gender,
       birth,
       photo,
     };
