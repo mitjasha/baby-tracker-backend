@@ -10,11 +10,15 @@ export class ChildsService {
     return this.childs;
   }
 
+  getChildById(id: string): Child {
+    return this.childs.find((child) => child.id === id);
+  }
+
   createChild(createChildDto: CreateCheldDto): Child {
     const { name, gender, birth, photo } = createChildDto;
 
     const child: Child = {
-      id: '',
+      id: Date.now().toString(),
       name,
       gender,
       birth,
@@ -23,5 +27,9 @@ export class ChildsService {
 
     this.childs.push(child);
     return child;
+  }
+
+  deleteChild(id: string): void {
+    this.childs = this.childs.filter((child) => child.id !== id);
   }
 }
