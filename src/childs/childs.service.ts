@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Child, EGender } from './child.model';
 import { CreateCheldDto } from './dto/create-child.dto';
 
@@ -11,7 +11,11 @@ export class ChildsService {
   }
 
   getChildById(id: string): Child {
-    return this.childs.find((child) => child.id === id);
+    const found = this.childs.find((child) => child.id === id);
+    if (!found) {
+      throw new NotFoundException(`Child with ID "${id}" not found`);
+    }
+    return found;
   }
 
   createChild(createChildDto: CreateCheldDto): Child {
