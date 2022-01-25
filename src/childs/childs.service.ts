@@ -11,10 +11,10 @@ export class ChildsService {
     @InjectRepository(ChildsRepository)
     private childsRepository: ChildsRepository,
   ) {}
-  // private childs: Child[] = [];
-  // getChilds(): Child[] {
-  //   return this.childs;
-  // }
+
+  getChilds(): Promise<Child[]> {
+    return this.childsRepository.getChilds();
+  }
 
   async getChildById(id: string): Promise<Child> {
     const found = await this.childsRepository.findOne(id);
@@ -24,10 +24,16 @@ export class ChildsService {
     }
     return found;
   }
-  async createChild(createChildDto: CreateChildDto): Promise<Child> {
+
+  createChild(createChildDto: CreateChildDto): Promise<Child> {
     return this.childsRepository.createChild(createChildDto);
   }
-  // deleteChild(id: string): void {
-  //   this.childs = this.childs.filter((child) => child.id !== id);
-  // }
+
+  async deleteChild(id: string): Promise<void> {
+    const result = await this.childsRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Child with "${id}" not found`);
+    }
+  }
 }
