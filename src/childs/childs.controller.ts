@@ -1,32 +1,30 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { Child, EGender } from './child.model';
+import { EGender } from './child-gender.enum';
+import { Child } from './childs.entity';
 import { ChildsService } from './childs.service';
-import { CreateCheldDto } from './dto/create-child.dto';
+import { CreateChildDto } from './dto/create-child.dto';
 
 @Controller('childs')
 export class ChildsController {
   constructor(private childsService: ChildsService) {}
-
-  @Get()
-  getChilds(): Child[] {
-    return this.childsService.getChilds();
-  }
-
+  // @Get()
+  // getChilds(): Child[] {
+  //   return this.childsService.getChilds();
+  // }
   @Get('/:id')
-  getChildById(@Param('id') id: string): Child {
+  getChildById(@Param('id') id: string): Promise<Child> {
     return this.childsService.getChildById(id);
   }
 
   @Post()
   createTask(
     @Body()
-    createChildDto: CreateCheldDto,
-  ): Child {
+    createChildDto: CreateChildDto,
+  ): Promise<Child> {
     return this.childsService.createChild(createChildDto);
   }
-
-  @Delete('/:id')
-  deleteTask(@Param('id') id: string): void {
-    return this.childsService.deleteChild(id);
-  }
+  // @Delete('/:id')
+  // deleteTask(@Param('id') id: string): void {
+  //   return this.childsService.deleteChild(id);
+  // }
 }

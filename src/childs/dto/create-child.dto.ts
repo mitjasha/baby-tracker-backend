@@ -1,7 +1,7 @@
-import { EGender } from '../child.model';
+import { EGender } from '../child-gender.enum';
 import { IsEnum, IsNotEmpty } from 'class-validator';
 
-export class CreateCheldDto {
+export class CreateChildDto {
   @IsNotEmpty()
   name: string;
 
