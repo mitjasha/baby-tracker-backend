@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { User } from 'src/auth/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { EGender } from './child-gender.enum';
 
 @Entity()
@@ -17,4 +19,8 @@ export class Child {
 
   @Column()
   photo: string;
+
+  @ManyToOne((_type) => User, (user) => user.childs, { eager: false })
+  @Exclude({ toPlainOnly: true })
+  user: User;
 }
