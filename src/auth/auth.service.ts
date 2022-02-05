@@ -4,13 +4,9 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import * as bycrypt from 'bcrypt';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt-payload.interface';
 import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
@@ -23,7 +19,6 @@ export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
-    private jwtService: JwtService,
   ) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<UserEntity> {
