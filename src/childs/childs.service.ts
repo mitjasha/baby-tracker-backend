@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
+import { UserEntity } from 'src/auth/user.entity';
 import { EGender } from './child-gender.enum';
 import { Child } from './childs.entity';
 import { ChildsRepository } from './childs.repository';
@@ -13,11 +13,11 @@ export class ChildsService {
     private childsRepository: ChildsRepository,
   ) {}
 
-  getChilds(user: User): Promise<Child[]> {
+  getChilds(user: UserEntity): Promise<Child[]> {
     return this.childsRepository.getChilds(user);
   }
 
-  async getChildById(id: string, user: User): Promise<Child> {
+  async getChildById(id: string, user: UserEntity): Promise<Child> {
     const found = await this.childsRepository.findOne({ where: { id, user } });
 
     if (!found) {
@@ -26,11 +26,14 @@ export class ChildsService {
     return found;
   }
 
-  createChild(createChildDto: CreateChildDto, user: User): Promise<Child> {
+  createChild(
+    createChildDto: CreateChildDto,
+    user: UserEntity,
+  ): Promise<Child> {
     return this.childsRepository.createChild(createChildDto, user);
   }
 
-  async deleteChild(id: string, user: User): Promise<void> {
+  async deleteChild(id: string, user: UserEntity): Promise<void> {
     const result = await this.childsRepository.delete({ id, user });
 
     if (result.affected === 0) {

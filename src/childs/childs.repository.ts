@@ -1,12 +1,12 @@
 import { TSAnyKeyword } from '@babel/types';
-import { User } from 'src/auth/user.entity';
+import { UserEntity } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Child } from './childs.entity';
 import { CreateChildDto } from './dto/create-child.dto';
 
 @EntityRepository(Child)
 export class ChildsRepository extends Repository<Child> {
-  async getChilds(user: User): Promise<Child[]> {
+  async getChilds(user: UserEntity): Promise<Child[]> {
     const query = this.createQueryBuilder('task');
     query.where({ user });
 
@@ -16,7 +16,7 @@ export class ChildsRepository extends Repository<Child> {
 
   async createChild(
     createChildDto: CreateChildDto,
-    user: User,
+    user: UserEntity,
   ): Promise<Child> {
     const { name, gender, birth, photo } = createChildDto;
     const child = this.create({
