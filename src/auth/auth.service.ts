@@ -49,7 +49,6 @@ export class AuthService {
         select: ['id', 'username', 'childs', 'password'],
       },
     );
-    // console.log('user', user);
 
     if (!user) {
       throw new HttpException(

@@ -16,7 +16,6 @@ export class AuthController {
     @Body() authCredentialsDto: AuthCredentialsDto,
   ): Promise<UserResponseInterface> {
     const user = await this.authService.signUp(authCredentialsDto);
-    console.log(user);
 
     return this.authService.buildUserResponse(user);
   }
