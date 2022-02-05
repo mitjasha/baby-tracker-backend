@@ -24,8 +24,6 @@ export class AuthController {
   @Post('users/login')
   async login(@Body() loginDto: LoginUserDto): Promise<UserResponseInterface> {
     const user = await this.authService.login(loginDto);
-    console.log(user);
-
     return this.authService.buildUserResponse(user);
   }
 

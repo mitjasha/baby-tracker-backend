@@ -39,10 +39,9 @@ export class AuthService {
         throw new InternalServerErrorException();
       }
     }
-    return;
   }
 
-  async findById(id: number): Promise<UserEntity> {
+  async findById(id: string): Promise<UserEntity> {
     return this.usersRepository.findOne(id);
   }
 
