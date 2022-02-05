@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
@@ -13,6 +15,8 @@ import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
 import { UserResponseInterface } from './types/use.response';
+import { LoginUserDto } from './dto/loginUser.dto';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -38,18 +42,38 @@ export class AuthService {
     return;
   }
 
-  async signIn(
-    authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string }> {
-    const { username, password } = authCredentialsDto;
-    const user = await this.usersRepository.findOne({ username });
-    if (user && (await bycrypt.compare(password, user.password))) {
-      const payload: JwtPayload = { username };
-      const accessToken: string = await this.jwtService.sign(payload);
-      return { accessToken };
-    } else {
-      throw new UnauthorizedException('Please check your login credentials');
+  async findById(id: number): Promise<UserEntity> {
+    return this.usersRepository.findOne(id);
+  }
+
+  async login(loginDto: LoginUserDto): Promise<UserEntity> {
+    const user = await this.usersRepository.findOne(
+      {
+        username: loginDto.username,
+      },
+      {
+        select: ['id', 'username', 'childs', 'password'],
+      },
+    );
+    // console.log('user', user);
+
+    if (!user) {
+      throw new HttpException(
+        'Credentials are not valid',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
+
+    const isPasswordCorrect = await compare(loginDto.password, user.password);
+    if (!isPasswordCorrect) {
+      throw new HttpException(
+        'Credentials are not valid',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    delete user.password;
+    return user;
   }
 
   generateJwt(user: UserEntity): string {
