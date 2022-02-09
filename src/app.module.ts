@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { configValidationSchema } from './config.schema';
 import { ChildsModule } from './childs/childs.module';
 import { AuthMiddleware } from './auth/middlewares/auth.middleware';
+import { EventModule } from './events/event.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AuthMiddleware } from './auth/middlewares/auth.middleware';
       },
     }),
     ChildsModule,
+    EventModule,
   ],
 })
 export class AppModule {

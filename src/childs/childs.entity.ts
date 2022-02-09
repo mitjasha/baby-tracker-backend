@@ -1,6 +1,13 @@
 import { Exclude } from 'class-transformer';
 import { UserEntity } from 'src/auth/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ChildEventEntity } from 'src/events/event.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { EGender } from './child-gender.enum';
 
 @Entity()
@@ -23,4 +30,7 @@ export class Child {
   @ManyToOne((_type) => UserEntity, (user) => user.childs, { eager: false })
   @Exclude({ toPlainOnly: true })
   user: UserEntity;
+
+  @OneToMany((_type) => ChildEventEntity, (childEvent) => childEvent.event)
+  childEvents: ChildEventEntity[];
 }
