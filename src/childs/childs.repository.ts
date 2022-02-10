@@ -3,6 +3,7 @@ import { UserEntity } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Child } from './childs.entity';
 import { CreateChildDto } from './dto/create-child.dto';
+import { UpdateChildDto } from './dto/update-child.dto';
 
 @EntityRepository(Child)
 export class ChildsRepository extends Repository<Child> {

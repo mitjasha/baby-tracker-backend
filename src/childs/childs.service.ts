@@ -5,6 +5,7 @@ import { EGender } from './child-gender.enum';
 import { Child } from './childs.entity';
 import { ChildsRepository } from './childs.repository';
 import { CreateChildDto } from './dto/create-child.dto';
+import { UpdateChildDto } from './dto/update-child.dto';
 
 @Injectable()
 export class ChildsService {
@@ -26,11 +27,15 @@ export class ChildsService {
     return found;
   }
 
-  createChild(
+  async createChild(
     createChildDto: CreateChildDto,
     user: UserEntity,
   ): Promise<Child> {
     return this.childsRepository.createChild(createChildDto, user);
+  }
+
+  async updateChild(id: string, updateChildDto: UpdateChildDto) {
+    return await this.childsRepository.update(id, updateChildDto);
   }
 
   async deleteChild(id: string, user: UserEntity): Promise<void> {

@@ -1,5 +1,5 @@
 import { EGender } from '../child-gender.enum';
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty } from 'class-validator';
 
 export class CreateChildDto {
   @IsNotEmpty()
@@ -10,6 +10,7 @@ export class CreateChildDto {
   gender: EGender;
 
   @IsNotEmpty()
+  @IsDateString()
   birth: string;
 
   // @IsNotEmpty()

@@ -22,7 +22,7 @@ export class Child {
   gender: EGender;
 
   @Column()
-  birth: string;
+  birth: Date;
 
   @Column()
   photo: string;

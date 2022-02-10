@@ -5,15 +5,16 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { UserEntity } from 'src/auth/user.entity';
-import { EGender } from './child-gender.enum';
 import { Child } from './childs.entity';
 import { ChildsService } from './childs.service';
 import { CreateChildDto } from './dto/create-child.dto';
+import { UpdateChildDto } from './dto/update-child.dto';
 
 @Controller('childs')
 @UseGuards(AuthGuard())
@@ -33,7 +34,7 @@ export class ChildsController {
     return this.childsService.getChildById(id, user);
   }
 
-  @Post()
+  @Post('/add')
   createChild(
     @Body()
     createChildDto: CreateChildDto,
@@ -42,8 +43,18 @@ export class ChildsController {
     return this.childsService.createChild(createChildDto, user);
   }
 
+  @Put('/:id')
+  async updateChild(
+    @Param('id') id: string,
+    @Body()
+    updateChildDto: UpdateChildDto,
+    @GetUser() user: UserEntity,
+  ) {
+    return this.childsService.updateChild(id, updateChildDto);
+  }
+
   @Delete('/:id')
-  deleteTask(
+  async deleteChild(
     @Param('id') id: string,
     @GetUser() user: UserEntity,
   ): Promise<void> {
