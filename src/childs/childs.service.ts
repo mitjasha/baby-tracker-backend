@@ -1,0 +1,48 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/auth/user.entity';
+import { EGender } from './child-gender.enum';
+import { Child } from './childs.entity';
+import { ChildsRepository } from './childs.repository';
+import { CreateChildDto } from './dto/create-child.dto';
+import { UpdateChildDto } from './dto/update-child.dto';
+
+@Injectable()
+export class ChildsService {
+  constructor(
+    @InjectRepository(ChildsRepository)
+    private childsRepository: ChildsRepository,
+  ) {}
+
+  getChilds(user: UserEntity): Promise<Child[]> {
+    return this.childsRepository.getChilds(user);
+  }
+
+  async getChildById(id: string, user: UserEntity): Promise<Child> {
+    const found = await this.childsRepository.findOne({ where: { id, user } });
+
+    if (!found) {
+      throw new NotFoundException(`Child with ID "${id}" not found`);
+    }
+    return found;
+  }
+
+  async createChild(
+    createChildDto: CreateChildDto,
+    user: UserEntity,
+  ): Promise<Child> {
+    return this.childsRepository.createChild(createChildDto, user);
+  }
+
+  async updateChild(id: string, updateChildDto: UpdateChildDto) {
+    return await this.childsRepository.update(id, updateChildDto);
+  }
+
+  async deleteChild(id: string, user: UserEntity): Promise<void> {
+    const result = await this.childsRepository.delete({ id, user });
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Child with "${id}" not found`);
+    }
+  }
+}
